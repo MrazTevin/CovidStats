@@ -22,9 +22,14 @@ import org.springframework.stereotype.Service;
 public class CoronaDataService {
     private static String DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
 
-    private List<LocationStats> allStats = new ArrayList();
+    private List<LocationStats> allStats = new ArrayList<>();
+
+    public List<LocationStats> getAllStats() {
+        return allStats;
+    }
+
     @PostConstruct
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "* * 1 * * *")
     public void fetchVirusData() throws IOException, InterruptedException {
                 List<LocationStats> newStats = new ArrayList<>();
                 HttpClient client = HttpClient.newHttpClient();
@@ -38,8 +43,12 @@ public class CoronaDataService {
                 for (CSVRecord record : records) {
                     LocationStats locationStat = new LocationStats();
                     locationStat.setState(record.get("Province/State"));
-                    locationStat.setCountry(record.get("Region/Country"));
+                    locationStat.setCountry(record.get("Country/Region"));
                     locationStat.setLatestTotalCases(Integer.parseInt(record.get(record.size() - 1)));
+                    System.out.println(locationStat);
+                    newStats.add(locationStat);
                 }
+                this.allStats = newStats;
+
     }
 }
