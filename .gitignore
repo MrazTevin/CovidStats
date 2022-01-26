@@ -34,7 +34,7 @@ build/
 .DS_Store
 
 ### Maven ###
-pom.xml.tag
+pom.xml.tagx
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
